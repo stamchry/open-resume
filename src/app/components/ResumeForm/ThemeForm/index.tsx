@@ -9,6 +9,7 @@ import {
 } from "components/ResumeForm/ThemeForm/Selection";
 import {
   changeSettings,
+  changeShowTopLine,
   DEFAULT_THEME_COLOR,
   selectSettings,
   type GeneralSetting,
@@ -61,6 +62,17 @@ export const ThemeForm = () => {
                 {settings.themeColor === color ? "✓" : ""}
               </div>
             ))}
+          </div>
+          <div className="mt-3">
+            <label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-gray-700">
+              <input
+                type="checkbox"
+                className="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500"
+                checked={settings.showTopLine ?? true}
+                onChange={(e) => dispatch(changeShowTopLine(e.target.checked))}
+              />
+              Show colored line at top of page
+            </label>
           </div>
         </div>
         <div>

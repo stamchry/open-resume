@@ -51,6 +51,59 @@ export const ResumePDFSection = ({
   </View>
 );
 
+const BOLD_REGEX =
+  /(\*\*[\s\S]+?\*\*|__[\s\S]+?__|<b>[\s\S]*?<\/b>|<strong>[\s\S]*?<\/strong>)/g;
+
+export const parseMarkdownText = (
+  text: string,
+  parentBold: boolean = false
+): React.ReactNode => {
+  if (!text) return text;
+
+  if (parentBold) {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, "$1")
+      .replace(/__(.*?)__/g, "$1")
+      .replace(/<\/?(?:b|strong)>/g, "");
+  }
+
+  const parts = text.split(BOLD_REGEX);
+
+  if (parts.length === 1) {
+    return text;
+  }
+
+  return parts.map((part, index) => {
+    if (!part) return null;
+
+    if (
+      (part.startsWith("**") && part.endsWith("**") && part.length >= 4) ||
+      (part.startsWith("__") && part.endsWith("__") && part.length >= 4)
+    ) {
+      const content = part.slice(2, -2);
+      return (
+        <Text key={index} style={{ fontWeight: "bold" }}>
+          {content}
+        </Text>
+      );
+    }
+
+    if (
+      (part.startsWith("<b>") && part.endsWith("</b>")) ||
+      (part.startsWith("<strong>") && part.endsWith("</strong>"))
+    ) {
+      const content = part.replace(/^<[^>]+>/, "").replace(/<[^>]+>$/, "");
+      return (
+        <Text key={index} style={{ fontWeight: "bold" }}>
+          {content}
+        </Text>
+      );
+    }
+
+    return part;
+  });
+};
+
 export const ResumePDFText = ({
   bold = false,
   themeColor,
@@ -62,6 +115,15 @@ export const ResumePDFText = ({
   style?: Style;
   children: React.ReactNode;
 }) => {
+  let content = children;
+  if (typeof children === "string") {
+    content = parseMarkdownText(children, bold);
+  } else if (Array.isArray(children)) {
+    content = children.map((child) =>
+      typeof child === "string" ? parseMarkdownText(child, bold) : child
+    );
+  }
+
   return (
     <Text
       style={{
@@ -71,7 +133,7 @@ export const ResumePDFText = ({
       }}
       debug={DEBUG_RESUME_PDF_FLAG}
     >
-      {children}
+      {content}
     </Text>
   );
 };

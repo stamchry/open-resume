@@ -67,6 +67,44 @@ export const Textarea = <T extends string>({
 }: InputProps<T, string>) => {
   const textareaRef = useAutosizeTextareaHeight({ value });
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "b") {
+      e.preventDefault();
+      const textarea = e.currentTarget;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selectedText = textarea.value.substring(start, end);
+      let newText: string;
+      let newStart: number;
+      let newEnd: number;
+      if (
+        selectedText.startsWith("**") &&
+        selectedText.endsWith("**") &&
+        selectedText.length >= 4
+      ) {
+        const unwrapped = selectedText.slice(2, -2);
+        newText =
+          textarea.value.substring(0, start) +
+          unwrapped +
+          textarea.value.substring(end);
+        newStart = start;
+        newEnd = start + unwrapped.length;
+      } else {
+        const wrapped = `**${selectedText}**`;
+        newText =
+          textarea.value.substring(0, start) +
+          wrapped +
+          textarea.value.substring(end);
+        newStart = start;
+        newEnd = start + wrapped.length;
+      }
+      onChange(name, newText);
+      requestAnimationFrame(() => {
+        textarea.setSelectionRange(newStart, newEnd);
+      });
+    }
+  };
+
   return (
     <InputGroupWrapper label={label} className={wrapperClassName}>
       <textarea
@@ -76,6 +114,7 @@ export const Textarea = <T extends string>({
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(name, e.target.value)}
+        onKeyDown={handleKeyDown}
       />
     </InputGroupWrapper>
   );
@@ -131,6 +170,34 @@ const BulletListTextareaGeneral = <T extends string>({
         }`}
         // Note: placeholder currently doesn't work
         placeholder={placeholder}
+        onKeyDown={(e) => {
+          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "b") {
+            e.preventDefault();
+            const selection = window.getSelection();
+            if (selection && selection.rangeCount > 0) {
+              const selectedText = selection.toString();
+              if (selectedText) {
+                let replacement: string;
+                if (
+                  selectedText.startsWith("**") &&
+                  selectedText.endsWith("**") &&
+                  selectedText.length >= 4
+                ) {
+                  replacement = selectedText.slice(2, -2);
+                } else {
+                  replacement = `**${selectedText}**`;
+                }
+                document.execCommand("insertText", false, replacement);
+              } else {
+                document.execCommand("insertText", false, "****");
+                try {
+                  selection.modify("move", "backward", "character");
+                  selection.modify("move", "backward", "character");
+                } catch {}
+              }
+            }
+          }
+        }}
         onChange={(e) => {
           if (e.type === "input") {
             const { innerText } = e.currentTarget as HTMLDivElement;

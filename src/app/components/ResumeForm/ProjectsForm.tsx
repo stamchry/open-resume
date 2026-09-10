@@ -47,8 +47,8 @@ export const ProjectsForm = () => {
             />
             <Input
               name="date"
-              label="Date"
-              placeholder="Winter 2022"
+              label="GitHub URL"
+              placeholder="https://github.com/..."
               value={date}
               onChange={handleProjectChange}
               labelClassName="col-span-2"

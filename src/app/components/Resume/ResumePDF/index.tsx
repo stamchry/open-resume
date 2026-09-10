@@ -72,6 +72,7 @@ export const ResumePDF = ({
         heading={formToHeading["projects"]}
         projects={projects}
         themeColor={themeColor}
+        isPDF={isPDF}
       />
     ),
     skills: () => (
@@ -104,7 +105,9 @@ export const ResumePDF = ({
             fontSize: fontSize + "pt",
           }}
         >
-          {Boolean(settings.themeColor) && (
+          {Boolean(
+            settings.themeColor && (settings.showTopLine ?? true)
+          ) && (
             <View
               style={{
                 width: spacing["full"],
@@ -116,7 +119,9 @@ export const ResumePDF = ({
           <View
             style={{
               ...styles.flexCol,
-              padding: `${spacing[0]} ${spacing[20]}`,
+              padding: `${spacing[0]} ${
+                documentSize === "A4" ? spacing[14] : spacing[20]
+              }`,
             }}
           >
             <ResumePDFProfile

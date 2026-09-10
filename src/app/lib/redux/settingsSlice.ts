@@ -27,6 +27,7 @@ export interface Settings {
     skills: boolean;
     custom: boolean;
   };
+  showTopLine?: boolean;
 }
 
 export type ShowForm = keyof Settings["formToShow"];
@@ -67,6 +68,7 @@ export const initialSettings: Settings = {
     skills: true,
     custom: true,
   },
+  showTopLine: true,
 };
 
 export const settingsSlice = createSlice({
@@ -121,6 +123,9 @@ export const settingsSlice = createSlice({
       const { field, value } = action.payload;
       draft["showBulletPoints"][field] = value;
     },
+    changeShowTopLine: (draft, action: PayloadAction<boolean>) => {
+      draft.showTopLine = action.payload;
+    },
     setSettings: (draft, action: PayloadAction<Settings>) => {
       return action.payload;
     },
@@ -133,6 +138,7 @@ export const {
   changeFormHeading,
   changeFormOrder,
   changeShowBulletPoints,
+  changeShowTopLine,
   setSettings,
 } = settingsSlice.actions;
 

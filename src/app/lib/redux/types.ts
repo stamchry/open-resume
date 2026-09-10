@@ -5,6 +5,7 @@ export interface ResumeProfile {
   url: string;
   summary: string;
   location: string;
+  customField?: string;
 }
 
 export interface ResumeWorkExperience {

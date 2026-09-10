@@ -50,7 +50,7 @@ export const ProfileForm = () => {
         />
         <Input
           label="Website"
-          labelClassName="col-span-4"
+          labelClassName="col-span-full"
           name="url"
           placeholder="linkedin.com/in/khanacademy"
           value={url}
@@ -58,10 +58,18 @@ export const ProfileForm = () => {
         />
         <Input
           label="Location"
-          labelClassName="col-span-2"
+          labelClassName="col-span-3"
           name="location"
           placeholder="NYC, NY"
           value={location}
+          onChange={handleProfileChange}
+        />
+        <Input
+          label="Custom Field"
+          labelClassName="col-span-3"
+          name="customField"
+          placeholder="EU Citizen"
+          value={profile.customField || ""}
           onChange={handleProfileChange}
         />
       </div>

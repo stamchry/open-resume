@@ -20,8 +20,8 @@ export const ResumePDFProfile = ({
   themeColor: string;
   isPDF: boolean;
 }) => {
-  const { name, email, phone, url, summary, location } = profile;
-  const iconProps = { email, phone, location, url };
+  const { name, email, phone, url, summary, location, customField } = profile;
+  const iconProps = { email, phone, location, url, customField };
 
   return (
     <ResumePDFSection style={{ marginTop: spacing["4"] }}>
@@ -87,7 +87,7 @@ export const ResumePDFProfile = ({
                 gap: spacing["1"],
               }}
             >
-              <ResumePDFIcon type={iconType} isPDF={isPDF} />
+              {key !== "customField" && <ResumePDFIcon type={iconType} isPDF={isPDF} />}
               <Wrapper>
                 <ResumePDFText>{value}</ResumePDFText>
               </Wrapper>
