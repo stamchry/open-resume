@@ -28,9 +28,11 @@ export const ResumeManagerBar = () => {
   const settings = useAppSelector(selectSettings);
   const dispatch = useAppDispatch();
 
-  const [storage, setStorage] = useState<MultiResumeStorage>(() =>
-    getMultiResumeStorage()
-  );
+  const [isMounted, setIsMounted] = useState(false);
+  const [storage, setStorage] = useState<MultiResumeStorage>({
+    activeResumeId: "default",
+    resumes: [],
+  });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showRenameModal, setShowRenameModal] = useState(false);
   const [renameValue, setRenameValue] = useState("");
@@ -41,6 +43,7 @@ export const ResumeManagerBar = () => {
 
   // Sync storage on mount
   useEffect(() => {
+    setIsMounted(true);
     setStorage(getMultiResumeStorage());
   }, []);
 
@@ -62,15 +65,22 @@ export const ResumeManagerBar = () => {
     };
   }, [isDropdownOpen]);
 
-  const activeResume: ResumeProfileItem =
-    storage.resumes.find((r) => r.id === storage.activeResumeId) ||
-    storage.resumes[0] || {
-      id: "default",
-      name: "My Resume",
-      updatedAt: Date.now(),
-      resume,
-      settings,
-    };
+  const activeResume: ResumeProfileItem = isMounted
+    ? storage.resumes.find((r) => r.id === storage.activeResumeId) ||
+      storage.resumes[0] || {
+        id: "default",
+        name: "My Resume",
+        updatedAt: 0,
+        resume,
+        settings,
+      }
+    : {
+        id: "default",
+        name: "My Resume",
+        updatedAt: 0,
+        resume,
+        settings,
+      };
 
   const handleSwitch = (id: string) => {
     if (id === activeResume.id) {
@@ -149,7 +159,10 @@ export const ResumeManagerBar = () => {
             className="flex items-center gap-2 rounded-md border border-gray-300 bg-gray-50 px-3 py-1.5 text-sm font-semibold text-gray-800 shadow-sm transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
           >
             <DocumentTextIcon className="h-4 w-4 text-sky-600 flex-shrink-0" />
-            <span className="max-w-[200px] truncate text-left">
+            <span
+              className="max-w-[200px] truncate text-left"
+              suppressHydrationWarning
+            >
               {activeResume.name}
             </span>
             <ChevronDownIcon
@@ -239,7 +252,7 @@ export const ResumeManagerBar = () => {
             New
           </button>
 
-          {storage.resumes.length > 1 && (
+          {isMounted && storage.resumes.length > 1 && (
             <button
               type="button"
               onClick={() => setShowDeleteModal(true)}
