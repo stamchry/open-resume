@@ -14,6 +14,7 @@ import { SkillsForm } from "components/ResumeForm/SkillsForm";
 import { ThemeForm } from "components/ResumeForm/ThemeForm";
 import { CustomForm } from "components/ResumeForm/CustomForm";
 import { ResumeCodeEditor } from "components/ResumeForm/ResumeCodeEditor";
+import { ResumeManagerBar } from "components/ResumeForm/ResumeManagerBar";
 import { DocumentTextIcon, CodeBracketIcon } from "@heroicons/react/24/outline";
 import { FlexboxSpacer } from "components/FlexboxSpacer";
 import { cx } from "lib/cx";
@@ -49,6 +50,8 @@ export const ResumeForm = () => {
           editorMode === "code" ? "max-w-3xl" : "max-w-2xl"
         )}
       >
+        <ResumeManagerBar />
+
         <div className="flex items-center justify-between border-b border-gray-200 pb-3">
           <div className="flex rounded-lg bg-gray-100 p-1">
             <button

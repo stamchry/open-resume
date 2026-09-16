@@ -19,39 +19,48 @@ export const WorkExperiencesForm = () => {
 
   return (
     <Form form="workExperiences" addButtonText="Add Job">
-      {workExperiences.map(({ company, jobTitle, date, descriptions }, idx) => {
-        const handleWorkExperienceChange = (
-          ...[
-            field,
-            value,
-          ]: CreateHandleChangeArgsWithDescriptions<ResumeWorkExperience>
-        ) => {
-          // TS doesn't support passing union type to single call signature
-          // https://github.com/microsoft/TypeScript/issues/54027
-          // any is used here as a workaround
-          dispatch(changeWorkExperiences({ idx, field, value } as any));
-        };
-        const showMoveUp = idx !== 0;
-        const showMoveDown = idx !== workExperiences.length - 1;
+      {workExperiences.map(
+        ({ company, jobTitle, date, descriptions, location }, idx) => {
+          const handleWorkExperienceChange = (
+            ...[
+              field,
+              value,
+            ]: CreateHandleChangeArgsWithDescriptions<ResumeWorkExperience>
+          ) => {
+            // TS doesn't support passing union type to single call signature
+            // https://github.com/microsoft/TypeScript/issues/54027
+            // any is used here as a workaround
+            dispatch(changeWorkExperiences({ idx, field, value } as any));
+          };
+          const showMoveUp = idx !== 0;
+          const showMoveDown = idx !== workExperiences.length - 1;
 
-        return (
-          <FormSection
-            key={idx}
-            form="workExperiences"
-            idx={idx}
-            showMoveUp={showMoveUp}
-            showMoveDown={showMoveDown}
-            showDelete={showDelete}
-            deleteButtonTooltipText="Delete job"
-          >
-            <Input
-              label="Company"
-              labelClassName="col-span-full"
-              name="company"
-              placeholder="Khan Academy"
-              value={company}
-              onChange={handleWorkExperienceChange}
-            />
+          return (
+            <FormSection
+              key={idx}
+              form="workExperiences"
+              idx={idx}
+              showMoveUp={showMoveUp}
+              showMoveDown={showMoveDown}
+              showDelete={showDelete}
+              deleteButtonTooltipText="Delete job"
+            >
+              <Input
+                label="Company"
+                labelClassName="col-span-4"
+                name="company"
+                placeholder="Khan Academy"
+                value={company}
+                onChange={handleWorkExperienceChange}
+              />
+              <Input
+                label="Location"
+                labelClassName="col-span-2"
+                name="location"
+                placeholder="San Francisco, CA"
+                value={location || ""}
+                onChange={handleWorkExperienceChange}
+              />
             <Input
               label="Job Title"
               labelClassName="col-span-4"

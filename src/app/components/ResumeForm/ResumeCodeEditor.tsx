@@ -75,6 +75,7 @@ export const ResumeCodeEditor = () => {
                 descriptions: Array.isArray(w.descriptions)
                   ? w.descriptions.map(String)
                   : [],
+                location: w.location || "",
               }))
             : [],
           educations: Array.isArray(parsed.educations)
@@ -86,6 +87,7 @@ export const ResumeCodeEditor = () => {
                 descriptions: Array.isArray(e.descriptions)
                   ? e.descriptions.map(String)
                   : [],
+                location: e.location || "",
               }))
             : [],
           projects: Array.isArray(parsed.projects)

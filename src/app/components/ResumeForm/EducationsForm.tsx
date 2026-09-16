@@ -22,7 +22,8 @@ export const EducationsForm = () => {
 
   return (
     <Form form={form} addButtonText="Add School">
-      {educations.map(({ school, degree, gpa, date, descriptions }, idx) => {
+      {educations.map(
+        ({ school, degree, gpa, date, descriptions, location }, idx) => {
         const handleEducationChange = (
           ...[
             field,
@@ -58,11 +59,11 @@ export const EducationsForm = () => {
               onChange={handleEducationChange}
             />
             <Input
-              label="Date"
+              label="Location"
               labelClassName="col-span-2"
-              name="date"
-              placeholder="May 2018"
-              value={date}
+              name="location"
+              placeholder="Ithaca, NY"
+              value={location || ""}
               onChange={handleEducationChange}
             />
             <Input
@@ -71,6 +72,14 @@ export const EducationsForm = () => {
               name="degree"
               placeholder="Bachelor of Science in Computer Engineering"
               value={degree}
+              onChange={handleEducationChange}
+            />
+            <Input
+              label="Date"
+              labelClassName="col-span-2"
+              name="date"
+              placeholder="May 2018"
+              value={date}
               onChange={handleEducationChange}
             />
             <Input

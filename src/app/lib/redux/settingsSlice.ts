@@ -34,7 +34,11 @@ export type ShowForm = keyof Settings["formToShow"];
 export type FormWithBulletPoints = keyof Settings["showBulletPoints"];
 export type GeneralSetting = Exclude<
   keyof Settings,
-  "formToShow" | "formToHeading" | "formsOrder" | "showBulletPoints"
+  | "formToShow"
+  | "formToHeading"
+  | "formsOrder"
+  | "showBulletPoints"
+  | "showTopLine"
 >;
 
 export const DEFAULT_THEME_COLOR = "#38bdf8"; // sky-400

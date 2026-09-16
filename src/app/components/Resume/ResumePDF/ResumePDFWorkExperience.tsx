@@ -18,16 +18,20 @@ export const ResumePDFWorkExperience = ({
 }) => {
   return (
     <ResumePDFSection themeColor={themeColor} heading={heading}>
-      {workExperiences.map(({ company, jobTitle, date, descriptions }, idx) => {
-        // Hide company name if it is the same as the previous company
-        const hideCompanyName =
-          idx > 0 && company === workExperiences[idx - 1].company;
+      {workExperiences.map(
+        ({ company, jobTitle, date, descriptions, location }, idx) => {
+          // Hide company name if it is the same as the previous company
+          const hideCompanyName =
+            idx > 0 && company === workExperiences[idx - 1].company;
 
-        return (
-          <View key={idx} style={idx !== 0 ? { marginTop: spacing["2"] } : {}}>
-            {!hideCompanyName && (
-              <ResumePDFText bold={true}>{company}</ResumePDFText>
-            )}
+          return (
+            <View key={idx} style={idx !== 0 ? { marginTop: spacing["2"] } : {}}>
+              {!hideCompanyName && (
+                <View style={styles.flexRowBetween}>
+                  <ResumePDFText bold={true}>{company}</ResumePDFText>
+                  {location ? <ResumePDFText>{location}</ResumePDFText> : null}
+                </View>
+              )}
             <View
               style={{
                 ...styles.flexRowBetween,

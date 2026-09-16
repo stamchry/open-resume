@@ -25,6 +25,7 @@ export const initialWorkExperience: ResumeWorkExperience = {
   jobTitle: "",
   date: "",
   descriptions: [],
+  location: "",
 };
 
 export const initialEducation: ResumeEducation = {
@@ -33,6 +34,7 @@ export const initialEducation: ResumeEducation = {
   gpa: "",
   date: "",
   descriptions: [],
+  location: "",
 };
 
 export const initialProject: ResumeProject = {

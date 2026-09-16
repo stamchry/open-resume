@@ -13,6 +13,7 @@ export interface ResumeWorkExperience {
   jobTitle: string;
   date: string;
   descriptions: string[];
+  location?: string;
 }
 
 export interface ResumeEducation {
@@ -21,6 +22,7 @@ export interface ResumeEducation {
   date: string;
   gpa: string;
   descriptions: string[];
+  location?: string;
 }
 
 export interface ResumeProject {
