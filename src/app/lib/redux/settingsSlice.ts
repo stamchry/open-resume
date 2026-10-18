@@ -28,6 +28,7 @@ export interface Settings {
     custom: boolean;
   };
   showTopLine?: boolean;
+  pageCount?: string;
 }
 
 export type ShowForm = keyof Settings["formToShow"];
@@ -51,6 +52,7 @@ export const initialSettings: Settings = {
   fontFamily: DEFAULT_FONT_FAMILY,
   fontSize: DEFAULT_FONT_SIZE,
   documentSize: "Letter",
+  pageCount: "1",
   formToShow: {
     workExperiences: true,
     educations: true,

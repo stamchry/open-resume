@@ -11,20 +11,23 @@ export const ResumePDFCustom = ({
   custom,
   themeColor,
   showBulletPoints,
+  is2Page = false,
 }: {
   heading: string;
   custom: ResumeCustom;
   themeColor: string;
   showBulletPoints: boolean;
+  is2Page?: boolean;
 }) => {
   const { descriptions } = custom;
 
   return (
-    <ResumePDFSection themeColor={themeColor} heading={heading}>
-      <View style={{ ...styles.flexCol }}>
+    <ResumePDFSection themeColor={themeColor} heading={heading} is2Page={is2Page}>
+      <View style={{ ...styles.flexCol }} {...{ "data-page-break-item": "true" }}>
         <ResumePDFBulletList
           items={descriptions}
           showBulletPoints={showBulletPoints}
+          is2Page={is2Page}
         />
       </View>
     </ResumePDFSection>

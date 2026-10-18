@@ -11,13 +11,15 @@ export const ResumePDFWorkExperience = ({
   heading,
   workExperiences,
   themeColor,
+  is2Page = false,
 }: {
   heading: string;
   workExperiences: ResumeWorkExperience[];
   themeColor: string;
+  is2Page?: boolean;
 }) => {
   return (
-    <ResumePDFSection themeColor={themeColor} heading={heading}>
+    <ResumePDFSection themeColor={themeColor} heading={heading} is2Page={is2Page}>
       {workExperiences.map(
         ({ company, jobTitle, date, descriptions, location }, idx) => {
           // Hide company name if it is the same as the previous company
@@ -25,7 +27,16 @@ export const ResumePDFWorkExperience = ({
             idx > 0 && company === workExperiences[idx - 1].company;
 
           return (
-            <View key={idx} style={idx !== 0 ? { marginTop: spacing["2"] } : {}}>
+            <View
+              key={idx}
+              wrap={false}
+              style={
+                idx !== 0
+                  ? { marginTop: is2Page ? spacing["2.5"] : spacing["1.5"] }
+                  : {}
+              }
+              {...{ "data-page-break-item": "true" }}
+            >
               {!hideCompanyName && (
                 <View style={styles.flexRowBetween}>
                   <ResumePDFText bold={true}>{company}</ResumePDFText>
@@ -37,14 +48,21 @@ export const ResumePDFWorkExperience = ({
                 ...styles.flexRowBetween,
                 marginTop: hideCompanyName
                   ? "-" + spacing["1"]
-                  : spacing["1.5"],
+                  : is2Page
+                  ? spacing["1.5"]
+                  : spacing["1"],
               }}
             >
               <ResumePDFText>{jobTitle}</ResumePDFText>
               <ResumePDFText>{date}</ResumePDFText>
             </View>
-            <View style={{ ...styles.flexCol, marginTop: spacing["1.5"] }}>
-              <ResumePDFBulletList items={descriptions} />
+            <View
+              style={{
+                ...styles.flexCol,
+                marginTop: is2Page ? spacing["1.5"] : spacing["1"],
+              }}
+            >
+              <ResumePDFBulletList items={descriptions} is2Page={is2Page} />
             </View>
           </View>
         );

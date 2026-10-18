@@ -1,8 +1,4 @@
 import { View } from "@react-pdf/renderer";
-import {
-  ResumePDFIcon,
-  type IconType,
-} from "components/Resume/ResumePDF/common/ResumePDFIcon";
 import { styles, spacing } from "components/Resume/ResumePDF/styles";
 import {
   ResumePDFLink,
@@ -15,20 +11,22 @@ export const ResumePDFProfile = ({
   profile,
   themeColor,
   isPDF,
+  is2Page = false,
 }: {
   profile: ResumeProfile;
   themeColor: string;
   isPDF: boolean;
+  is2Page?: boolean;
 }) => {
   const { name, email, phone, url, summary, location, customField } = profile;
-  const iconProps = { email, phone, location, url, customField };
+  const profileData = { email, phone, location, url, customField };
 
   return (
-    <ResumePDFSection style={{ marginTop: spacing["4"] }}>
+    <ResumePDFSection style={{ marginTop: is2Page ? spacing[0] : spacing["3.5"] }}>
       <ResumePDFText
         bold={true}
         themeColor={themeColor}
-        style={{ fontSize: "20pt" }}
+        style={{ fontSize: "18pt" }}
       >
         {name}
       </ResumePDFText>
@@ -40,17 +38,8 @@ export const ResumePDFProfile = ({
           marginTop: spacing["0.5"],
         }}
       >
-        {Object.entries(iconProps).map(([key, value]) => {
+        {Object.entries(profileData).map(([key, value]) => {
           if (!value) return null;
-
-          let iconType = key as IconType;
-          if (key === "url") {
-            if (value.includes("github")) {
-              iconType = "url_github";
-            } else if (value.includes("linkedin")) {
-              iconType = "url_linkedin";
-            }
-          }
 
           const shouldUseLinkWrapper = ["email", "url", "phone"].includes(key);
           const Wrapper = ({ children }: { children: React.ReactNode }) => {
@@ -84,10 +73,8 @@ export const ResumePDFProfile = ({
               style={{
                 ...styles.flexRow,
                 alignItems: "center",
-                gap: spacing["1"],
               }}
             >
-              {key !== "customField" && <ResumePDFIcon type={iconType} isPDF={isPDF} />}
               <Wrapper>
                 <ResumePDFText>{value}</ResumePDFText>
               </Wrapper>

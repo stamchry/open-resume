@@ -10,6 +10,7 @@ import { DEFAULT_FONT_COLOR } from "lib/redux/settingsSlice";
 import type { Settings, ShowForm } from "lib/redux/settingsSlice";
 import type { Resume } from "lib/redux/types";
 import { SuppressResumePDFErrorMessage } from "components/Resume/ResumePDF/common/SuppressResumePDFErrorMessage";
+import { ResumePreviewPaginator } from "components/Resume/ResumePDF/ResumePreviewPaginator";
 
 /**
  * Note: ResumePDF is supposed to be rendered inside PDFViewer. However,
@@ -57,6 +58,7 @@ export const ResumePDF = ({
         heading={formToHeading["workExperiences"]}
         workExperiences={workExperiences}
         themeColor={themeColor}
+        is2Page={is2Page}
       />
     ),
     educations: () => (
@@ -65,6 +67,7 @@ export const ResumePDF = ({
         educations={educations}
         themeColor={themeColor}
         showBulletPoints={showBulletPoints["educations"]}
+        is2Page={is2Page}
       />
     ),
     projects: () => (
@@ -73,6 +76,7 @@ export const ResumePDF = ({
         projects={projects}
         themeColor={themeColor}
         isPDF={isPDF}
+        is2Page={is2Page}
       />
     ),
     skills: () => (
@@ -81,6 +85,7 @@ export const ResumePDF = ({
         skills={skills}
         themeColor={themeColor}
         showBulletPoints={showBulletPoints["skills"]}
+        is2Page={is2Page}
       />
     ),
     custom: () => (
@@ -89,13 +94,21 @@ export const ResumePDF = ({
         custom={custom}
         themeColor={themeColor}
         showBulletPoints={showBulletPoints["custom"]}
+        is2Page={is2Page}
       />
     ),
   };
 
+  const is2Page = settings.pageCount === "2";
+  const horizontalPadding = is2Page
+    ? spacing[14]
+    : documentSize === "A4"
+    ? spacing[8]
+    : spacing[20];
+
   return (
     <>
-      <Document title={`${name} Resume`} author={name} producer={"OpenResume"}>
+      <Document title={name || "Resume"} author={name} producer={"OpenResume"}>
         <Page
           size={documentSize === "A4" ? "A4" : "LETTER"}
           style={{
@@ -103,36 +116,56 @@ export const ResumePDF = ({
             color: DEFAULT_FONT_COLOR,
             fontFamily,
             fontSize: fontSize + "pt",
+            paddingBottom: is2Page ? spacing[6] : spacing[0],
           }}
         >
-          {Boolean(
-            settings.themeColor && (settings.showTopLine ?? true)
-          ) && (
-            <View
-              style={{
-                width: spacing["full"],
-                height: spacing[3.5],
-                backgroundColor: themeColor,
-              }}
-            />
-          )}
           <View
+            fixed
+            style={{
+              width: spacing["full"],
+              height: is2Page
+                ? spacing[7]
+                : Boolean(settings.themeColor && (settings.showTopLine ?? true))
+                ? spacing[3.5]
+                : 0,
+            }}
+          >
+            {Boolean(
+              settings.themeColor && (settings.showTopLine ?? true)
+            ) && (
+              <View
+                style={{
+                  width: spacing["full"],
+                  height: spacing[3.5],
+                  backgroundColor: themeColor,
+                }}
+              />
+            )}
+          </View>
+          <View
+            {...{ "data-page-container": "true" }}
             style={{
               ...styles.flexCol,
-              padding: `${spacing[0]} ${
-                documentSize === "A4" ? spacing[14] : spacing[20]
-              }`,
+              padding: `${spacing[0]} ${horizontalPadding}`,
             }}
           >
             <ResumePDFProfile
               profile={profile}
               themeColor={themeColor}
               isPDF={isPDF}
+              is2Page={is2Page}
             />
             {showFormsOrder.map((form) => {
               const Component = formTypeToComponent[form];
               return <Component key={form} />;
             })}
+            {!isPDF && is2Page && (
+              <ResumePreviewPaginator
+                documentSize={documentSize}
+                themeColor={themeColor}
+                showTopLine={settings.showTopLine ?? true}
+              />
+            )}
           </View>
         </Page>
       </Document>

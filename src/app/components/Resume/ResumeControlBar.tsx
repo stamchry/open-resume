@@ -62,7 +62,7 @@ const ResumeControlBar = ({
       <a
         className="ml-1 flex items-center gap-1 rounded-md border border-gray-300 px-3 py-0.5 hover:bg-gray-100 lg:ml-8"
         href={instance.url!}
-        download={fileName}
+        download={fileName.endsWith(".pdf") ? fileName : `${fileName}.pdf`}
       >
         <ArrowDownTrayIcon className="h-4 w-4" />
         <span className="whitespace-nowrap">Download Resume</span>

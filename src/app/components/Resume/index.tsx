@@ -35,10 +35,11 @@ export const Resume = () => {
       <div className="relative flex justify-center md:justify-start">
         <FlexboxSpacer maxWidth={50} className="hidden md:block" />
         <div className="relative">
-          <section className="h-[calc(100vh-var(--top-nav-bar-height)-var(--resume-control-bar-height))] overflow-hidden md:p-[var(--resume-padding)]">
+          <section className="h-[calc(100vh-var(--top-nav-bar-height)-var(--resume-control-bar-height))] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 md:p-[var(--resume-padding)]">
             <ResumeIframeCSR
               documentSize={settings.documentSize}
               scale={scale}
+              pageCount={settings.pageCount}
               enablePDFViewer={DEBUG_RESUME_PDF_FLAG}
             >
               <ResumePDF
@@ -53,7 +54,7 @@ export const Resume = () => {
             setScale={setScale}
             documentSize={settings.documentSize}
             document={document}
-            fileName={resume.profile.name + " - Resume"}
+            fileName={resume.profile.name.trim() || "Resume"}
           />
         </div>
         <ResumeControlBarBorder />

@@ -12,11 +12,13 @@ export const ResumePDFSkills = ({
   skills,
   themeColor,
   showBulletPoints,
+  is2Page = false,
 }: {
   heading: string;
   skills: ResumeSkills;
   themeColor: string;
   showBulletPoints: boolean;
+  is2Page?: boolean;
 }) => {
   const { descriptions, featuredSkills } = skills;
   const featuredSkillsWithText = featuredSkills.filter((item) => item.skill);
@@ -27,9 +29,14 @@ export const ResumePDFSkills = ({
   ];
 
   return (
-    <ResumePDFSection themeColor={themeColor} heading={heading}>
+    <ResumePDFSection themeColor={themeColor} heading={heading} is2Page={is2Page}>
       {featuredSkillsWithText.length > 0 && (
-        <View style={{ ...styles.flexRowBetween, marginTop: spacing["0.5"] }}>
+        <View
+          style={{
+            ...styles.flexRowBetween,
+            marginTop: is2Page ? spacing["1"] : spacing["0.5"],
+          }}
+        >
           {featuredSkillsPair.map((pair, idx) => (
             <View
               key={idx}
@@ -55,10 +62,11 @@ export const ResumePDFSkills = ({
           ))}
         </View>
       )}
-      <View style={{ ...styles.flexCol }}>
+      <View style={{ ...styles.flexCol }} {...{ "data-page-break-item": "true" }}>
         <ResumePDFBulletList
           items={descriptions}
           showBulletPoints={showBulletPoints}
+          is2Page={is2Page}
         />
       </View>
     </ResumePDFSection>

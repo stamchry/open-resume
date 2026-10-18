@@ -7,6 +7,10 @@ RUN npm install
 
 COPY . .
 
+# node_modules is installed before sources are copied (for layer caching), so
+# apply the pdfkit copy/paste fix now that patches/patch-pdfkit.mjs exists.
+RUN node patches/patch-pdfkit.mjs
+
 EXPOSE 3000
 
 ENV WATCHPACK_POLLING=true

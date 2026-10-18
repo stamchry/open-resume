@@ -6,6 +6,7 @@ import {
   DocumentSizeSelections,
   FontFamilySelectionsCSR,
   FontSizeSelections,
+  PageCountSelections,
 } from "components/ResumeForm/ThemeForm/Selection";
 import {
   changeSettings,
@@ -103,6 +104,14 @@ export const ThemeForm = () => {
           <DocumentSizeSelections
             themeColor={themeColor}
             selectedDocumentSize={documentSize}
+            handleSettingsChange={handleSettingsChange}
+          />
+        </div>
+        <div>
+          <InputGroupWrapper label="Page Count" />
+          <PageCountSelections
+            themeColor={themeColor}
+            selectedPageCount={settings.pageCount || "1"}
             handleSettingsChange={handleSettingsChange}
           />
         </div>

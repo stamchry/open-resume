@@ -161,3 +161,36 @@ export const DocumentSizeSelections = ({
     </SelectionsWrapper>
   );
 };
+
+export const PageCountSelections = ({
+  selectedPageCount = "1",
+  themeColor,
+  handleSettingsChange,
+}: {
+  themeColor: string;
+  selectedPageCount?: string;
+  handleSettingsChange: (field: GeneralSetting, value: string) => void;
+}) => {
+  return (
+    <SelectionsWrapper>
+      {[
+        { id: "1", label: "1 Page", sub: "Single page" },
+        { id: "2", label: "2 Pages", sub: "Two pages" },
+      ].map(({ id, label, sub }, idx) => {
+        return (
+          <Selection
+            key={idx}
+            selectedColor={themeColor}
+            isSelected={id === selectedPageCount}
+            onClick={() => handleSettingsChange("pageCount", id)}
+          >
+            <div className="flex flex-col items-center">
+              <div>{label}</div>
+              <div className="text-xs">{sub}</div>
+            </div>
+          </Selection>
+        );
+      })}
+    </SelectionsWrapper>
+  );
+};

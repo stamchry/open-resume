@@ -9,22 +9,29 @@ export const ResumePDFSection = ({
   heading,
   style = {},
   children,
+  is2Page = false,
 }: {
   themeColor?: string;
   heading?: string;
   style?: Style;
   children: React.ReactNode;
+  is2Page?: boolean;
 }) => (
   <View
     style={{
       ...styles.flexCol,
-      gap: spacing["2"],
-      marginTop: spacing["5"],
+      gap: is2Page ? spacing["2"] : spacing["1.5"],
+      marginTop: is2Page ? spacing["5"] : spacing["4"],
       ...style,
     }}
+    {...{ "data-page-section": "true" }}
   >
     {heading && (
-      <View style={{ ...styles.flexRow, alignItems: "center" }}>
+      <View
+        wrap={false}
+        minPresenceAhead={30}
+        style={{ ...styles.flexRow, alignItems: "center" }}
+      >
         {themeColor && (
           <View
             style={{
@@ -141,33 +148,48 @@ export const ResumePDFText = ({
 export const ResumePDFBulletList = ({
   items,
   showBulletPoints = true,
+  is2Page = false,
 }: {
   items: string[];
   showBulletPoints?: boolean;
+  is2Page?: boolean;
 }) => {
   return (
     <>
       {items.map((item, idx) => (
-        <View style={{ ...styles.flexRow }} key={idx}>
+        <View
+          wrap={false}
+          style={{
+            ...styles.flexRow,
+            alignItems: "flex-start",
+            marginTop: is2Page && idx !== 0 ? spacing["0.5"] : 0,
+          }}
+          key={idx}
+        >
           {showBulletPoints && (
             <ResumePDFText
               style={{
-                paddingLeft: spacing["2"],
-                paddingRight: spacing["2"],
-                lineHeight: "1.3",
+                paddingLeft: is2Page ? spacing["2"] : spacing["1.5"],
+                paddingRight: is2Page ? spacing["2"] : spacing["1.5"],
+                lineHeight: is2Page ? "1.38" : "1.3",
               }}
               bold={true}
             >
               {"•"}
             </ResumePDFText>
           )}
-          {/* A breaking change was introduced causing text layout to be wider than node's width
-              https://github.com/diegomura/react-pdf/issues/2182. flexGrow & flexBasis fixes it */}
-          <ResumePDFText
-            style={{ lineHeight: "1.3", flexGrow: 1, flexBasis: 0 }}
-          >
-            {item}
-          </ResumePDFText>
+          {/* A dedicated View container with flexGrow/flexBasis/flexShrink fixes text measurement
+              and ensures wrapped lines align perfectly with the start of the text */}
+          <View style={{ flexGrow: 1, flexBasis: 0, flexShrink: 1 }}>
+            <ResumePDFText
+              style={{
+                lineHeight: is2Page ? "1.38" : "1.3",
+                textAlign: "left",
+              }}
+            >
+              {typeof item === "string" ? item.trim() : item}
+            </ResumePDFText>
+          </View>
         </View>
       ))}
     </>
